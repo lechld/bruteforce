@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# Ignore build directories
+cmake-build-debug/
+cmake-build-release/
+
+# Ignore CLion/IDE-specific files
+.idea/
+*.iml
+
+# Ignore system files
+.DS_Store
+Thumbs.db
