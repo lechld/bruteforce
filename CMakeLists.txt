@@ -4,3 +4,6 @@ project(bruteforce)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(bruteforce main.cpp)
+
+find_package(wxWidgets)
+target_link_libraries(bruteforce wxWidgets::wxWidgets)

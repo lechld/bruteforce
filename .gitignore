@@ -42,3 +42,6 @@ cmake-build-release/
 # Ignore system files
 .DS_Store
 Thumbs.db
+
+build/CMakeCache.txt
+build/CMakeFiles/
