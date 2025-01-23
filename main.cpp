@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/statline.h>
 
 class MainMenuPanel;
 class GamePanel;
@@ -40,6 +41,9 @@ public:
         auto* title = new wxStaticText(this, wxID_ANY, "Bruteforce", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
         title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
         vbox->Add(title, 0, wxALIGN_CENTER | wxTOP, 20);
+
+        auto divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
+        vbox->Add(divider, 0, wxEXPAND | wxALL, 20);
 
         auto* nameField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(300, -1));
         nameField->SetHint("Enter name");
@@ -102,17 +106,50 @@ class HighscorePanel : public wxPanel {
 public:
     HighscorePanel(wxWindow* parent, MainFrame* mainFrame)
         : wxPanel(parent), mainFrame(mainFrame) {
-        auto* vbox = new wxBoxSizer(wxVERTICAL);
+        auto mainSizer = new wxBoxSizer(wxVERTICAL);
 
-        auto* highscoreLabel = new wxStaticText(this, wxID_ANY, "Highscores:");
-        auto* backButton = new wxButton(this, wxID_ANY, "←");
+        auto scrollableArea = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL);
+        scrollableArea->SetScrollRate(5, 5);
 
-        vbox->Add(highscoreLabel, 0, wxALL, 10);
-        vbox->Add(backButton, 0, wxALL, 10);
+        auto scrollSizer = new wxBoxSizer(wxVERTICAL);
 
-        SetSizer(vbox);
-
+        auto backButton = new wxButton(scrollableArea, wxID_ANY, "←", wxDefaultPosition, wxSize(50, 30));
+        backButton->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
         backButton->Bind(wxEVT_BUTTON, &HighscorePanel::OnBackToMenu, this);
+
+        auto* title = new wxStaticText(scrollableArea, wxID_ANY, "Highscores", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+        title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+
+        auto headerSizer = new wxBoxSizer(wxHORIZONTAL);
+        headerSizer->Add(backButton, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP, 10);
+        headerSizer->AddStretchSpacer();
+        headerSizer->Add(title, 0, wxALIGN_CENTER_VERTICAL | wxTOP, 10);
+        headerSizer->AddStretchSpacer();
+
+        scrollSizer->Add(headerSizer, 0, wxEXPAND | wxALL, 10);
+
+        auto divider = new wxStaticLine(scrollableArea, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
+        scrollSizer->Add(divider, 0, wxEXPAND | wxALL, 10);
+
+        for (int i = 1; i <= 10; ++i) {
+            auto* rowSizer = new wxBoxSizer(wxHORIZONTAL);
+            auto* rank = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("#%d", i), wxDefaultPosition, wxSize(50, -1));
+            auto* name = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("Player %d", i), wxDefaultPosition, wxSize(150, -1));
+            auto* score = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("%d pts", 1000 - i * 50), wxDefaultPosition, wxSize(100, -1));
+
+            rowSizer->Add(rank, 0, wxLEFT | wxRIGHT, 10);
+            rowSizer->Add(name, 0, wxEXPAND | wxRIGHT, 10);
+            rowSizer->Add(score, 0, wxEXPAND);
+
+            scrollSizer->Add(rowSizer, 0, wxEXPAND | wxALL, 5);
+        }
+
+        scrollableArea->SetSizer(scrollSizer);
+        scrollSizer->SetSizeHints(scrollableArea);
+
+        mainSizer->Add(scrollableArea, 1, wxEXPAND);
+
+        SetSizer(mainSizer);
     }
 
 private:
