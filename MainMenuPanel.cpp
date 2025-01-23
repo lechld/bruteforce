@@ -18,7 +18,7 @@ MainMenuPanel::MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
     auto divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
     vbox->Add(divider, 0, wxEXPAND | wxALL, 20);
 
-    auto* nameField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(300, -1));
+    nameField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(300, -1));
     nameField->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     nameField->SetHint("Enter your name");
     vbox->Add(nameField, 0, wxALIGN_CENTER | wxTOP, 20);

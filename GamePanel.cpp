@@ -6,7 +6,7 @@
 #include "MainFrame.h"
 #include <wx/statline.h>
 
-const int GAME_DURATION_SECONDS = 300;
+constexpr int GAME_DURATION_SECONDS = 300;
 
 GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
     : wxPanel(parent), mainFrame(mainFrame), remainingTime(GAME_DURATION_SECONDS) {
@@ -47,7 +47,7 @@ GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
 
 
 void GamePanel::OnBackToMenu(wxCommandEvent& event) {
-    if (int response = wxMessageBox("Are you sure you want to go back to the menu? Progress will be lost.", "Confirm", wxYES_NO | wxICON_QUESTION, this); response == wxYES) {
+    if (const int response = wxMessageBox("Are you sure you want to go back to the menu? Progress will be lost.", "Confirm", wxYES_NO | wxICON_QUESTION, this); response == wxYES) {
         mainFrame->ShowMenu();
     }
 }

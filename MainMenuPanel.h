@@ -15,7 +15,7 @@ public:
 
 private:
     MainFrame* mainFrame;
-    wxTextCtrl* nameInput;
+    wxTextCtrl* nameField;
 
     void OnStartGame(wxCommandEvent& event);
     void OnHighscores(wxCommandEvent& event);
