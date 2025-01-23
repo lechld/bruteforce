@@ -170,9 +170,7 @@ public:
         SetSizer(mainSizer);
 
         Bind(wxEVT_SHOW, &GamePanel::OnShow, this);
-
         timer.Bind(wxEVT_TIMER, &GamePanel::OnTimer, this);
-        timer.Start(1000); // Each second
 
         UpdateTimerLabel();
     }
@@ -206,7 +204,13 @@ private:
     }
 
     void OnShow(wxShowEvent& event) {
-        remainingTime = GAME_DURATION_SECONDS;
+        if (event.IsShown()) {
+            remainingTime = GAME_DURATION_SECONDS;
+            UpdateTimerLabel();
+            timer.Start(1000);
+        } else {
+            timer.Stop();
+        }
     }
 };
 
