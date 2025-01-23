@@ -34,23 +34,32 @@ class MainMenuPanel : public wxPanel {
 public:
     MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
         : wxPanel(parent), mainFrame(mainFrame) {
+
         auto* vbox = new wxBoxSizer(wxVERTICAL);
 
-        auto* nameLabel = new wxStaticText(this, wxID_ANY, "Enter Name:");
-        nameInput = new wxTextCtrl(this, wxID_ANY);
+        auto* title = new wxStaticText(this, wxID_ANY, "Bruteforce", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+        title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+        vbox->Add(title, 0, wxALIGN_CENTER | wxTOP, 20);
 
-        auto* startButton = new wxButton(this, wxID_ANY, "Start Game");
+        auto* nameField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(300, -1));
+        nameField->SetHint("Enter name");
+        vbox->Add(nameField, 0, wxALIGN_CENTER | wxTOP, 20);
+
+        auto* startGameButton = new wxButton(this, wxID_ANY, "Start Game");
+        startGameButton->Enable(false); // Disable until a name is entered
+        vbox->Add(startGameButton, 0, wxALIGN_CENTER | wxTOP, 10);
+
         auto* highscoreButton = new wxButton(this, wxID_ANY, "Highscores");
+        vbox->Add(highscoreButton, 0, wxALIGN_CENTER | wxTOP, 10);
 
-        vbox->Add(nameLabel, 0, wxALL, 10);
-        vbox->Add(nameInput, 0, wxALL | wxEXPAND, 10);
-        vbox->Add(startButton, 0, wxALL, 10);
-        vbox->Add(highscoreButton, 0, wxALL, 10);
+        nameField->Bind(wxEVT_TEXT, [startGameButton](wxCommandEvent& event) {
+            startGameButton->Enable(!event.GetString().IsEmpty());
+        });
+
+        startGameButton->Bind(wxEVT_BUTTON, &MainMenuPanel::OnStartGame, this);
+        highscoreButton->Bind(wxEVT_BUTTON, &MainMenuPanel::OnHighscores, this);
 
         SetSizer(vbox);
-
-        startButton->Bind(wxEVT_BUTTON, &MainMenuPanel::OnStartGame, this);
-        highscoreButton->Bind(wxEVT_BUTTON, &MainMenuPanel::OnHighscores, this);
     }
 
 private:
@@ -96,7 +105,7 @@ public:
         auto* vbox = new wxBoxSizer(wxVERTICAL);
 
         auto* highscoreLabel = new wxStaticText(this, wxID_ANY, "Highscores:");
-        auto* backButton = new wxButton(this, wxID_ANY, "Back to Menu");
+        auto* backButton = new wxButton(this, wxID_ANY, "←");
 
         vbox->Add(highscoreLabel, 0, wxALL, 10);
         vbox->Add(backButton, 0, wxALL, 10);
@@ -115,7 +124,7 @@ private:
 };
 
 MainFrame::MainFrame()
-    : wxFrame(nullptr, wxID_ANY, "Simple Game", wxDefaultPosition, wxSize(400, 300)) {
+    : wxFrame(nullptr, wxID_ANY, "Simple Game", wxDefaultPosition, wxSize(600, 400)) {
     auto* sizer = new wxBoxSizer(wxVERTICAL);
 
     mainMenu = new MainMenuPanel(this, this);
