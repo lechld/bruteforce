@@ -3,7 +3,17 @@ project(bruteforce)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(bruteforce main.cpp)
+add_executable(bruteforce main.cpp
+        MainFrame.cpp
+        MainFrame.h
+        MainMenuPanel.cpp
+        MainMenuPanel.h
+        GamePanel.cpp
+        GamePanel.h
+        HighscorePanel.cpp
+        HighscorePanel.h
+        RankEntryPanel.cpp
+        RankEntryPanel.h)
 
 find_package(wxWidgets)
 target_link_libraries(bruteforce wxWidgets::wxWidgets)
