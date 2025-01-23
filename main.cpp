@@ -40,17 +40,20 @@ public:
         auto sizer = new wxBoxSizer(wxHORIZONTAL);
 
         auto rankLabel = new wxStaticText(this, wxID_ANY, rank, wxDefaultPosition, wxDefaultSize);
-        rankLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+        rankLabel->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+        rankLabel->SetForegroundColour(*wxBLACK);
 
         auto nameLabel = new wxStaticText(this, wxID_ANY, name, wxDefaultPosition, wxDefaultSize);
-        nameLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        nameLabel->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        nameLabel->SetForegroundColour(*wxBLACK);
 
         auto scoreLabel = new wxStaticText(this, wxID_ANY, score, wxDefaultPosition, wxDefaultSize);
-        scoreLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        scoreLabel->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        scoreLabel->SetForegroundColour(*wxBLACK);
 
-        sizer->Add(rankLabel, 0, wxALL, 10);
-        sizer->Add(nameLabel, 1, wxALL, 10);
-        sizer->Add(scoreLabel, 0, wxALL, 10);
+        sizer->Add(rankLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 10);
+        sizer->Add(nameLabel, 1, wxALL | wxALIGN_CENTER_VERTICAL, 10);
+        sizer->Add(scoreLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 10);
 
         SetSizer(sizer);
 
@@ -74,7 +77,6 @@ protected:
         dc.DrawRoundedRectangle(3, 3, size.GetWidth() - 3, size.GetHeight() - 3, 10);
     }
 };
-
 
 class MainMenuPanel : public wxPanel {
 public:
@@ -179,7 +181,7 @@ public:
         auto* divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 2), wxLI_HORIZONTAL);
         mainSizer->Add(divider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10);
 
-        auto* scrollableWindow = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL);
+        scrollableWindow = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL);
         scrollableWindow->SetScrollRate(5, 5);
 
         auto* scrollableSizer = new wxBoxSizer(wxVERTICAL);
@@ -198,13 +200,24 @@ public:
         mainSizer->Add(scrollableWindow, 1, wxEXPAND | wxALL, 10);
 
         SetSizer(mainSizer);
+
+        // TODO: This feels like a nasty workaround to avoid state issues.
+        Bind(wxEVT_SHOW, &HighscorePanel::OnShow, this);
     }
 
 private:
     MainFrame* mainFrame;
+    wxScrolledWindow* scrollableWindow;
 
     void OnBackToMenu(wxCommandEvent& event) {
         mainFrame->ShowMenu();
+    }
+
+    void OnShow(wxShowEvent& event) {
+        if (event.IsShown()) {
+            scrollableWindow->Scroll(0, 0);
+        }
+        event.Skip();
     }
 };
 
