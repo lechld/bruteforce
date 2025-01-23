@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <wx/statline.h>
+#include <wx/dcbuffer.h>
 
 class MainMenuPanel;
 class GamePanel;
@@ -24,13 +25,57 @@ private:
 class MyApp : public wxApp {
 public:
     bool OnInit() override {
-        MainFrame* frame = new MainFrame();
+        auto* frame = new MainFrame();
         frame->Show(true);
         return true;
     }
 };
 
-// Main Menu Panel
+class RankEntryPanel : public wxPanel {
+public:
+    RankEntryPanel(wxWindow* parent, const wxString& rank, const wxString& name, const wxString& score)
+        : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+        auto sizer = new wxBoxSizer(wxHORIZONTAL);
+
+        auto rankLabel = new wxStaticText(this, wxID_ANY, rank, wxDefaultPosition, wxDefaultSize);
+        rankLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+
+        auto nameLabel = new wxStaticText(this, wxID_ANY, name, wxDefaultPosition, wxDefaultSize);
+        nameLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+
+        auto scoreLabel = new wxStaticText(this, wxID_ANY, score, wxDefaultPosition, wxDefaultSize);
+        scoreLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+
+        sizer->Add(rankLabel, 0, wxALL, 10);
+        sizer->Add(nameLabel, 1, wxALL, 10);
+        sizer->Add(scoreLabel, 0, wxALL, 10);
+
+        SetSizer(sizer);
+
+        SetMinSize(wxSize(-1, 60));
+        Bind(wxEVT_PAINT, &RankEntryPanel::OnPaint, this);
+    }
+
+protected:
+    void OnPaint(wxPaintEvent&) {
+        wxAutoBufferedPaintDC dc(this);
+        wxSize size = GetSize();
+
+        wxColour bgColor(240, 240, 240);
+        wxColour borderColor(200, 200, 200);
+        dc.SetBrush(wxBrush(bgColor));
+        dc.SetPen(wxPen(borderColor, 2));
+        dc.DrawRoundedRectangle(0, 0, size.GetWidth(), size.GetHeight(), 10);
+
+        dc.SetBrush(wxBrush(wxColour(0, 0, 0, 50)));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRoundedRectangle(3, 3, size.GetWidth() - 3, size.GetHeight() - 3, 10);
+    }
+};
+
+
 class MainMenuPanel : public wxPanel {
 public:
     MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
@@ -132,16 +177,13 @@ public:
         scrollSizer->Add(divider, 0, wxEXPAND | wxALL, 10);
 
         for (int i = 1; i <= 10; ++i) {
-            auto* rowSizer = new wxBoxSizer(wxHORIZONTAL);
-            auto* rank = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("#%d", i), wxDefaultPosition, wxSize(50, -1));
-            auto* name = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("Player %d", i), wxDefaultPosition, wxSize(150, -1));
-            auto* score = new wxStaticText(scrollableArea, wxID_ANY, wxString::Format("%d pts", 1000 - i * 50), wxDefaultPosition, wxSize(100, -1));
+            wxString rank = wxString::Format("#%d", i);
+            wxString name = wxString::Format("Player %d", i);
+            wxString score = wxString::Format("%d pts", 1000 - i * 50);
 
-            rowSizer->Add(rank, 0, wxLEFT | wxRIGHT, 10);
-            rowSizer->Add(name, 0, wxEXPAND | wxRIGHT, 10);
-            rowSizer->Add(score, 0, wxEXPAND);
+            auto* rankEntry = new RankEntryPanel(scrollableArea, rank, name, score);
 
-            scrollSizer->Add(rowSizer, 0, wxEXPAND | wxALL, 5);
+            scrollSizer->Add(rankEntry, 0, wxEXPAND | wxALL, 10);
         }
 
         scrollableArea->SetSizer(scrollSizer);
