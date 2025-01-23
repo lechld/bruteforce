@@ -4,6 +4,8 @@
 
 #include "PasswordInputCtrl.h"
 
+wxDEFINE_EVENT(EVT_PASSWORD_CORRECT, wxCommandEvent);
+
 PasswordInputCtrl::PasswordInputCtrl(wxWindow* parent, const wxString& targetPassword, wxWindowID id,
                                      const wxPoint& pos, const wxSize& size, long style)
     : wxRichTextCtrl(parent, id, "", pos, size, style | wxTE_NO_VSCROLL), targetPassword(targetPassword) {
@@ -12,6 +14,7 @@ PasswordInputCtrl::PasswordInputCtrl(wxWindow* parent, const wxString& targetPas
     ShowScrollbars(wxSHOW_SB_DEFAULT, wxSHOW_SB_NEVER);
 
     Bind(wxEVT_TEXT, &PasswordInputCtrl::OnTextChange, this);
+    Bind(wxEVT_CHAR, &PasswordInputCtrl::OnChar, this);
 }
 
 void PasswordInputCtrl::SetTargetPassword(const wxString& password) {
@@ -30,10 +33,11 @@ void PasswordInputCtrl::OnTextChange(wxCommandEvent& event) {
 void PasswordInputCtrl::HighlightInput() {
     wxString userInput = GetValue();
 
-    Freeze(); // don't draw before we are finished
+    Freeze(); // skip drawing for now
     Unbind(wxEVT_TEXT, &PasswordInputCtrl::OnTextChange, this);
     Clear();
 
+    bool isCorrectPassword = true;
     for (size_t i = 0; i < userInput.Length(); ++i) {
         wxString currentChar = userInput.Mid(i, 1);
 
@@ -44,6 +48,7 @@ void PasswordInputCtrl::HighlightInput() {
         } else {
             style.SetTextColour(*wxWHITE);
             style.SetBackgroundColour(*wxRED);
+            isCorrectPassword = false;
         }
 
         BeginStyle(style);
@@ -51,7 +56,19 @@ void PasswordInputCtrl::HighlightInput() {
         EndStyle();
     }
 
-    Thaw(); // draw that shit
+    Thaw(); // now draw that shit
     Bind(wxEVT_TEXT, &PasswordInputCtrl::OnTextChange, this);
+
+    if (isCorrectPassword && userInput.Length() == targetPassword.Length()) {
+        wxCommandEvent event(EVT_PASSWORD_CORRECT);
+        event.SetEventObject(this);
+        ProcessWindowEvent(event);
+    }
 }
 
+void PasswordInputCtrl::OnChar(wxKeyEvent& event) {
+    if (event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER) {
+        return;
+    }
+    event.Skip();
+}

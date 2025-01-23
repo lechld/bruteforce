@@ -8,6 +8,8 @@
 #include <wx/richtext/richtextctrl.h>
 #include <wx/wx.h>
 
+wxDECLARE_EVENT(EVT_PASSWORD_CORRECT, wxCommandEvent);
+
 class PasswordInputCtrl : public wxRichTextCtrl {
 public:
     PasswordInputCtrl(wxWindow* parent, const wxString& targetPassword, wxWindowID id = wxID_ANY,
@@ -23,6 +25,7 @@ private:
 
     void OnTextChange(wxCommandEvent& event);
     void HighlightInput();
+    void OnChar(wxKeyEvent& event);
 };
 
 #endif //PASSWORDINPUTCTRL_H

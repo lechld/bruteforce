@@ -38,7 +38,7 @@ GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
     auto* divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 2), wxLI_HORIZONTAL);
     mainSizer->Add(divider, 0, wxEXPAND | wxALL, 10);
 
-    auto* passwordInput = new PasswordInputCtrl(this,  "target", wxID_ANY, wxDefaultPosition,  wxSize(400, -1));
+    passwordInput = new PasswordInputCtrl(this,  "target", wxID_ANY, wxDefaultPosition,  wxSize(400, -1));
     passwordInput->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     passwordInput->SetMinSize(wxSize(400, 30));
     mainSizer->Add(passwordInput, 0, wxALIGN_CENTER | wxALL, 10);
@@ -47,6 +47,8 @@ GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
 
     Bind(wxEVT_SHOW, &GamePanel::OnShow, this);
     timer.Bind(wxEVT_TIMER, &GamePanel::OnTimer, this);
+
+    passwordInput->Bind(EVT_PASSWORD_CORRECT, &GamePanel::OnPasswordCorrect, this); // Bind custom event
 
     UpdateTimerLabel();
 }
@@ -82,4 +84,9 @@ void GamePanel::OnShow(wxShowEvent& event) {
     } else {
         timer.Stop();
     }
+}
+
+void GamePanel::OnPasswordCorrect(wxCommandEvent &event) {
+    wxMessageBox("Handler is working", "correct", wxOK | wxICON_INFORMATION, this);
+    passwordInput->Clear();
 }
