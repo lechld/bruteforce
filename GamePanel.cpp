@@ -6,6 +6,8 @@
 #include "MainFrame.h"
 #include <wx/statline.h>
 
+#include "PasswordInputCtrl.h"
+
 constexpr int GAME_DURATION_SECONDS = 300;
 
 GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
@@ -16,26 +18,30 @@ GamePanel::GamePanel(wxWindow* parent, MainFrame* mainFrame)
 
     auto* backButton = new wxButton(this, wxID_ANY, "←", wxDefaultPosition, wxSize(50, 30));
     backButton->Bind(wxEVT_BUTTON, &GamePanel::OnBackToMenu, this);
-    headerSizer->Add(backButton, 0, wxALIGN_LEFT | wxTOP | wxLEFT, 10);
+    headerSizer->Add(backButton, 0, wxALIGN_CENTER_VERTICAL | wxALL, 10);
+
+    auto* title = new wxStaticText(this, wxID_ANY, "Crack as my passwords as possible", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+    title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
     auto* titleSizer = new wxBoxSizer(wxVERTICAL);
-    auto* title = new wxStaticText(this, wxID_ANY, "Level 1", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
-    title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    titleSizer->Add(title, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, 10);
+    titleSizer->AddStretchSpacer();
+    titleSizer->Add(title, 0, wxALIGN_CENTER | wxTOP, 10);
+    titleSizer->AddStretchSpacer();
+    headerSizer->Add(titleSizer, 1, wxEXPAND);
 
-    headerSizer->Add(titleSizer, 1, wxALIGN_CENTER_VERTICAL);
-
-    auto* timerSizer = new wxBoxSizer(wxVERTICAL);
     timerLabel = new wxStaticText(this, wxID_ANY, "05:00", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     timerLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    timerSizer->Add(timerLabel, 0, wxALIGN_RIGHT | wxTOP | wxRIGHT, 10);
-
-    headerSizer->Add(timerSizer, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    headerSizer->Add(timerLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 10);
 
     mainSizer->Add(headerSizer, 0, wxEXPAND | wxALL, 10);
 
     auto* divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 2), wxLI_HORIZONTAL);
-    mainSizer->Add(divider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10);
+    mainSizer->Add(divider, 0, wxEXPAND | wxALL, 10);
+
+    auto* passwordInput = new PasswordInputCtrl(this,  "target", wxID_ANY, wxDefaultPosition,  wxSize(400, -1));
+    passwordInput->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    passwordInput->SetMinSize(wxSize(400, 30));
+    mainSizer->Add(passwordInput, 0, wxALIGN_CENTER | wxALL, 10);
 
     SetSizer(mainSizer);
 

@@ -13,7 +13,9 @@ add_executable(bruteforce main.cpp
         HighscorePanel.cpp
         HighscorePanel.h
         RankEntryPanel.cpp
-        RankEntryPanel.h)
+        RankEntryPanel.h
+        PasswordInputCtrl.cpp
+        PasswordInputCtrl.h)
 
 find_package(wxWidgets)
 target_link_libraries(bruteforce wxWidgets::wxWidgets)
