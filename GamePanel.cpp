@@ -48,7 +48,7 @@ GamePanel::GamePanel(wxWindow *parent, MainFrame *mainFrame)
     hintText->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     mainSizer->Add(hintText, 0, wxALIGN_CENTER | wxALL, 10);
 
-    timerLabel = new wxStaticText(this, wxID_ANY, "00:00", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    timerLabel = new wxStaticText(this, wxID_ANY, "00:30", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     timerLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     mainSizer->Add(timerLabel, 0, wxALIGN_CENTER | wxALL, 10);
 
@@ -86,6 +86,9 @@ void GamePanel::UpdateTimerLabel() {
 
 void GamePanel::OnShow(wxShowEvent &event) {
     if (event.IsShown()) {
+        currentLevel = 0;
+        currentPoints = 0;
+        remainingTime = 0;
         NextLevel();
         timer.Start(1000);
     } else {
