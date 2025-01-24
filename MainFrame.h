@@ -19,7 +19,7 @@ public:
 
     void ShowMenu();
 
-    void ShowGame();
+    void ShowGame(std::string playerName);
 
     void ShowHighscore();
 

@@ -46,7 +46,7 @@ MainMenuPanel::MainMenuPanel(wxWindow *parent, MainFrame *mainFrame)
 }
 
 void MainMenuPanel::OnStartGame(wxCommandEvent &) {
-    mainFrame->ShowGame();
+    mainFrame->ShowGame(nameField->GetValue().ToStdString());
 }
 
 void MainMenuPanel::OnHighscores(wxCommandEvent &) {

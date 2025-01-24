@@ -40,8 +40,9 @@ void MainFrame::ShowMenu() {
     Layout();
 }
 
-void MainFrame::ShowGame() {
+void MainFrame::ShowGame(std::string playerName) {
     HidePanels();
+    gamePanel->SetPlayerName(playerName);
     gamePanel->Show();
     Layout();
 }

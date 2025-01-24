@@ -8,6 +8,8 @@
 #include "MainFrame.h"
 #include <wx/wx.h>
 
+#include <utility>
+
 #include "PasswordGenerator.h"
 #include "PasswordInputCtrl.h"
 
@@ -15,6 +17,9 @@ class GamePanel : public wxPanel {
 public:
     GamePanel(wxWindow *parent, MainFrame *mainFrame);
 
+    void SetPlayerName(const std::string &playerName) {
+        this->playerName = playerName;
+    }
 private:
     MainFrame *mainFrame;
     PasswordInputCtrl *passwordInput;
@@ -28,6 +33,7 @@ private:
     int remainingTime;
     int currentLevel;
     int currentPoints;
+    std::string playerName;
 
     void OnBackToMenu(wxCommandEvent &event);
 
