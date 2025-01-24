@@ -19,5 +19,7 @@ private:
     void OnBackToMenu(wxCommandEvent &event);
 
     void OnShow(wxShowEvent &event);
+
+    void RenderHighscoreItems();
 };
 #endif //HIGHSCOREPANEL_H

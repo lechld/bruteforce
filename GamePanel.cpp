@@ -6,6 +6,7 @@
 #include "MainFrame.h"
 #include <wx/statline.h>
 
+#include "HighscoreManager.h"
 #include "PasswordInputCtrl.h"
 
 constexpr int GAME_DURATION_SECONDS = 300;
@@ -74,6 +75,8 @@ void GamePanel::OnTimer(wxTimerEvent &event) {
         UpdateTimerLabel();
     } else {
         timer.Stop();
+
+        HighscoreManager::GetInstance().AddHighscore(playerName, currentPoints);
 
         if (const int response = wxMessageBox(playerName + ", check your standings in the Highscore.",
                                               "Time's up!", wxOK | wxICON_EXCLAMATION, this); response == wxOK) {

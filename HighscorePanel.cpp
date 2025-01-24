@@ -7,6 +7,7 @@
 #include "MainFrame.h"
 #include <wx/statline.h> // Needed for wxStaticLine
 
+#include "HighscoreManager.h"
 #include "RankEntryPanel.h"
 
 HighscorePanel::HighscorePanel(wxWindow *parent, MainFrame *mainFrame)
@@ -34,19 +35,8 @@ HighscorePanel::HighscorePanel(wxWindow *parent, MainFrame *mainFrame)
     scrollableWindow = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL);
     scrollableWindow->SetScrollRate(5, 5);
 
-    auto *scrollableSizer = new wxBoxSizer(wxVERTICAL);
+    RenderHighscoreItems();
 
-    for (int i = 1; i <= 20; ++i) {
-        wxString rank = wxString::Format("#%d", i);
-        wxString name = wxString::Format("Player %d", i);
-        wxString score = wxString::Format("%d pts", 1000 - i * 50);
-
-        auto *rankEntry = new RankEntryPanel(scrollableWindow, rank, name, score);
-
-        scrollableSizer->Add(rankEntry, 0, wxEXPAND | wxALL, 10);
-    }
-
-    scrollableWindow->SetSizer(scrollableSizer);
     mainSizer->Add(scrollableWindow, 1, wxEXPAND | wxALL, 10);
 
     SetSizer(mainSizer);
@@ -62,6 +52,31 @@ void HighscorePanel::OnBackToMenu(wxCommandEvent &) {
 void HighscorePanel::OnShow(wxShowEvent &event) {
     if (event.IsShown()) {
         scrollableWindow->Scroll(0, 0);
+        RenderHighscoreItems();
     }
     event.Skip();
+}
+
+void HighscorePanel::RenderHighscoreItems() {
+    if (scrollableWindow->GetSizer()) {
+        scrollableWindow->GetSizer()->Clear(true);
+    }
+
+    auto *scrollableSizer = new wxBoxSizer(wxVERTICAL);
+
+    auto highscoreManager = HighscoreManager::GetInstance();
+    const auto highscores = highscoreManager.GetHighscores();
+
+    for (int i = 0; i < highscores.size(); i++) {
+        auto rank = wxString::Format("#%d", i + 1);
+        auto name = wxString::FromUTF8(highscores[i].name);
+        auto score = wxString::Format("%d pts", highscores[i].score);
+
+        auto *rankEntry = new RankEntryPanel(scrollableWindow, rank, name, score);
+
+        scrollableSizer->Add(rankEntry, 0, wxEXPAND | wxALL, 10);
+    }
+
+    scrollableWindow->SetSizer(scrollableSizer);
+    Layout();
 }
