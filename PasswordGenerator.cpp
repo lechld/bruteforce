@@ -53,15 +53,15 @@ std::string PasswordGenerator::GetCharacterPool(const int level) {
     const std::string special = "!@#$%^&*()-_=+<>?";
 
     std::string pool;
-    if (level == 1) {
+    if (level <= 3) {
         pool = digits;
-    } else if (level == 2) {
+    } else if (level <= 6) {
         pool = lowercase;
-    } else if (level == 3) {
+    } else if (level <= 8) {
         pool = digits + lowercase;
-    } else if (level == 4) {
+    } else if (level <= 10) {
         pool = digits + lowercase + uppercase;
-    } else if (level >= 5) {
+    } else if (level >= 14) {
         pool = digits + lowercase + uppercase + special;
     }
 
