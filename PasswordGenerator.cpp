@@ -34,7 +34,7 @@ std::string PasswordGenerator::GeneratePassword(const int level) {
     return password;
 }
 
-std::string PasswordGenerator::GenerateHint(const std::string& password) {
+std::string PasswordGenerator::GenerateHint(const std::string &password) {
     std::vector<std::string> components;
 
     if (std::ranges::any_of(password, ::isdigit)) {
@@ -50,7 +50,7 @@ std::string PasswordGenerator::GenerateHint(const std::string& password) {
         components.push_back("special characters");
     }
 
-    return  "Hint: Contains only " + join(components, ", ");
+    return "Hint: Contains only " + join(components, ", ");
 }
 
 int PasswordGenerator::GetPasswordLength(const int level) {
@@ -97,7 +97,7 @@ int PasswordGenerator::GetTimeBonus(int level) {
 }
 
 
-std::string PasswordGenerator::join(const std::vector<std::string>& elements, const std::string& delimiter) {
+std::string PasswordGenerator::join(const std::vector<std::string> &elements, const std::string &delimiter) {
     std::ostringstream result;
     for (size_t i = 0; i < elements.size(); ++i) {
         result << elements[i];

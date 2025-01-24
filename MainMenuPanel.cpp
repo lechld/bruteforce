@@ -7,11 +7,11 @@
 #include <wx/wx.h>
 #include <wx/statline.h>
 
-MainMenuPanel::MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
+MainMenuPanel::MainMenuPanel(wxWindow *parent, MainFrame *mainFrame)
     : wxPanel(parent), mainFrame(mainFrame) {
-    auto* vbox = new wxBoxSizer(wxVERTICAL);
+    auto *vbox = new wxBoxSizer(wxVERTICAL);
 
-    auto* title = new wxStaticText(this, wxID_ANY, "Bruteforce", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+    auto *title = new wxStaticText(this, wxID_ANY, "Bruteforce", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     vbox->Add(title, 0, wxALIGN_CENTER | wxTOP, 20);
 
@@ -23,19 +23,19 @@ MainMenuPanel::MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
     nameField->SetHint("Enter your name");
     vbox->Add(nameField, 0, wxALIGN_CENTER | wxTOP, 20);
 
-    auto* startGameButton = new wxButton(this, wxID_ANY, "Start Game");
+    auto *startGameButton = new wxButton(this, wxID_ANY, "Start Game");
     startGameButton->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     startGameButton->SetMinSize(wxSize(150, 40));
     startGameButton->Enable(false);
     vbox->Add(startGameButton, 0, wxALIGN_CENTER | wxTOP, 20);
 
-    auto* highscoreButton = new wxButton(this, wxID_ANY, "Highscores");
+    auto *highscoreButton = new wxButton(this, wxID_ANY, "Highscores");
     highscoreButton->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     highscoreButton->SetMinSize(wxSize(150, 40));
 
     vbox->Add(highscoreButton, 0, wxALIGN_CENTER | wxTOP, 10);
 
-    nameField->Bind(wxEVT_TEXT, [startGameButton](wxCommandEvent& event) {
+    nameField->Bind(wxEVT_TEXT, [startGameButton](wxCommandEvent &event) {
         startGameButton->Enable(!event.GetString().IsEmpty());
     });
 
@@ -45,10 +45,10 @@ MainMenuPanel::MainMenuPanel(wxWindow* parent, MainFrame* mainFrame)
     SetSizer(vbox);
 }
 
-void MainMenuPanel::OnStartGame(wxCommandEvent&) {
+void MainMenuPanel::OnStartGame(wxCommandEvent &) {
     mainFrame->ShowGame();
 }
 
-void MainMenuPanel::OnHighscores(wxCommandEvent&) {
+void MainMenuPanel::OnHighscores(wxCommandEvent &) {
     mainFrame->ShowHighscore();
 }

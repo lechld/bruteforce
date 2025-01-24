@@ -14,6 +14,7 @@ class HighscorePanel;
 class MainFrame : public wxFrame {
 public:
     MainFrame();
+
     ~MainFrame();
 
     void ShowMenu();

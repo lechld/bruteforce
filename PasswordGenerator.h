@@ -9,13 +9,17 @@
 class PasswordGenerator {
 public:
     static std::string GeneratePassword(int level);
-    static std::string GenerateHint(const std::string& password);
+
+    static std::string GenerateHint(const std::string &password);
+
     static int GetTimeBonus(int level);
+
 private:
     static int GetPasswordLength(int level);
+
     static std::string GetCharacterPool(int level);
 
-    static std::string join(const std::vector<std::string>& elements, const std::string& delimiter);
+    static std::string join(const std::vector<std::string> &elements, const std::string &delimiter);
 };
 
 #endif //PASSWORDGENERATOR_H

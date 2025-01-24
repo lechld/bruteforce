@@ -9,9 +9,10 @@
 
 class RankEntryPanel : public wxPanel {
 public:
-    RankEntryPanel(wxWindow* parent, const wxString& rank, const wxString& name, const wxString& score);
+    RankEntryPanel(wxWindow *parent, const wxString &rank, const wxString &name, const wxString &score);
+
 protected:
-    void OnPaint(wxPaintEvent&);
+    void OnPaint(wxPaintEvent &);
 };
 
 #endif //RANKENTRYPANEL_H

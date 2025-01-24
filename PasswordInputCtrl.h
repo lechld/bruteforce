@@ -12,20 +12,22 @@ wxDECLARE_EVENT(EVT_PASSWORD_CORRECT, wxCommandEvent);
 
 class PasswordInputCtrl : public wxRichTextCtrl {
 public:
-    PasswordInputCtrl(wxWindow* parent, const wxString& targetPassword, wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+    PasswordInputCtrl(wxWindow *parent, const wxString &targetPassword, wxWindowID id = wxID_ANY,
+                      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                       long style = 0);
 
-    void SetTargetPassword(const wxString& password);
+    void SetTargetPassword(const wxString &password);
 
-    const wxString& GetTargetPassword() const;
+    const wxString &GetTargetPassword() const;
 
 private:
     wxString targetPassword;
 
-    void OnTextChange(wxCommandEvent& event);
+    void OnTextChange(wxCommandEvent &event);
+
     void HighlightInput();
-    void OnChar(wxKeyEvent& event);
+
+    void OnChar(wxKeyEvent &event);
 };
 
 #endif //PASSWORDINPUTCTRL_H

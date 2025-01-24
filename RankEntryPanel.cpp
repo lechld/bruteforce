@@ -6,7 +6,7 @@
 #include <wx/dcbuffer.h>
 
 RankEntryPanel::RankEntryPanel(wxWindow *parent, const wxString &rank, const wxString &name, const wxString &score)
-: wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) {
+    : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     auto sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -33,7 +33,7 @@ RankEntryPanel::RankEntryPanel(wxWindow *parent, const wxString &rank, const wxS
     Bind(wxEVT_PAINT, &RankEntryPanel::OnPaint, this);
 }
 
-void RankEntryPanel::OnPaint(wxPaintEvent&) {
+void RankEntryPanel::OnPaint(wxPaintEvent &) {
     wxAutoBufferedPaintDC dc(this);
     wxSize size = GetSize();
 

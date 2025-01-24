@@ -6,10 +6,9 @@
 
 wxDEFINE_EVENT(EVT_PASSWORD_CORRECT, wxCommandEvent);
 
-PasswordInputCtrl::PasswordInputCtrl(wxWindow* parent, const wxString& targetPassword, wxWindowID id,
-                                     const wxPoint& pos, const wxSize& size, long style)
+PasswordInputCtrl::PasswordInputCtrl(wxWindow *parent, const wxString &targetPassword, wxWindowID id,
+                                     const wxPoint &pos, const wxSize &size, long style)
     : wxRichTextCtrl(parent, id, "", pos, size, style | wxTE_NO_VSCROLL), targetPassword(targetPassword) {
-
     SetVirtualSize(wxSize(400, -1));
     ShowScrollbars(wxSHOW_SB_DEFAULT, wxSHOW_SB_NEVER);
 
@@ -17,15 +16,15 @@ PasswordInputCtrl::PasswordInputCtrl(wxWindow* parent, const wxString& targetPas
     Bind(wxEVT_CHAR, &PasswordInputCtrl::OnChar, this);
 }
 
-void PasswordInputCtrl::SetTargetPassword(const wxString& password) {
+void PasswordInputCtrl::SetTargetPassword(const wxString &password) {
     targetPassword = password;
 }
 
-const wxString& PasswordInputCtrl::GetTargetPassword() const {
+const wxString &PasswordInputCtrl::GetTargetPassword() const {
     return targetPassword;
 }
 
-void PasswordInputCtrl::OnTextChange(wxCommandEvent& event) {
+void PasswordInputCtrl::OnTextChange(wxCommandEvent &event) {
     HighlightInput();
     event.Skip();
 }
@@ -70,7 +69,7 @@ void PasswordInputCtrl::HighlightInput() {
     }
 }
 
-void PasswordInputCtrl::OnChar(wxKeyEvent& event) {
+void PasswordInputCtrl::OnChar(wxKeyEvent &event) {
     if (event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER) {
         return;
     }

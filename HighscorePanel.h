@@ -10,13 +10,14 @@
 
 class HighscorePanel : public wxPanel {
 public:
-    HighscorePanel(wxWindow* parent, MainFrame* mainFrame);
+    HighscorePanel(wxWindow *parent, MainFrame *mainFrame);
 
 private:
-    MainFrame* mainFrame;
-    wxScrolledWindow* scrollableWindow;
+    MainFrame *mainFrame;
+    wxScrolledWindow *scrollableWindow;
 
-    void OnBackToMenu(wxCommandEvent& event);
-    void OnShow(wxShowEvent& event);
+    void OnBackToMenu(wxCommandEvent &event);
+
+    void OnShow(wxShowEvent &event);
 };
 #endif //HIGHSCOREPANEL_H

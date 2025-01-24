@@ -17,7 +17,7 @@ struct HighscoreEntry {
 
 class HighscoreManager {
 public:
-    static HighscoreManager& GetInstance() {
+    static HighscoreManager &GetInstance() {
         static HighscoreManager instance;
         return instance;
     }
@@ -32,6 +32,7 @@ public:
 
 private:
     HighscoreManager() = default;
+
     std::vector<HighscoreEntry> highscores = {};
 };
 

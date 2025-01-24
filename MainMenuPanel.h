@@ -11,14 +11,15 @@ class MainFrame;
 
 class MainMenuPanel : public wxPanel {
 public:
-    MainMenuPanel(wxWindow* parent, MainFrame* mainFrame);
+    MainMenuPanel(wxWindow *parent, MainFrame *mainFrame);
 
 private:
-    MainFrame* mainFrame;
-    wxTextCtrl* nameField;
+    MainFrame *mainFrame;
+    wxTextCtrl *nameField;
 
-    void OnStartGame(wxCommandEvent& event);
-    void OnHighscores(wxCommandEvent& event);
+    void OnStartGame(wxCommandEvent &event);
+
+    void OnHighscores(wxCommandEvent &event);
 };
 
 #endif //MAINMENUPANEL_H
