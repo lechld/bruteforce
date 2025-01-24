@@ -5,10 +5,11 @@
 #include "PasswordGenerator.h"
 
 #include <random>
+#include <sstream>
 
-std::string PasswordGenerator::GeneratePassword(int level) {
-    int passwordLength = GetPasswordLength(level);
-    std::string characterPool = GetCharacterPool(level);
+std::string PasswordGenerator::GeneratePassword(const int level) {
+    const int passwordLength = GetPasswordLength(level);
+    const std::string characterPool = GetCharacterPool(level);
 
     std::string password;
     std::random_device rd;
@@ -22,15 +23,34 @@ std::string PasswordGenerator::GeneratePassword(int level) {
     return password;
 }
 
+std::string PasswordGenerator::GenerateHint(const std::string& password) {
+    std::vector<std::string> components;
+
+    if (std::ranges::any_of(password, ::isdigit)) {
+        components.push_back("digits");
+    }
+    if (std::ranges::any_of(password, ::islower)) {
+        components.push_back("lowercase characters");
+    }
+    if (std::ranges::any_of(password, ::isupper)) {
+        components.push_back("uppercase characters");
+    }
+    if (std::ranges::any_of(password, [](char c) { return !isalnum(c); })) {
+        components.push_back("special characters");
+    }
+
+    return  "Contains " + join(components, ", ");
+}
+
 int PasswordGenerator::GetPasswordLength(const int level) {
     return level + 4;
 }
 
-std::string PasswordGenerator::GetCharacterPool(int level) {
-    std::string digits = "0123456789";
-    std::string lowercase = "abcdefghijklmnopqrstuvwxyz";
-    std::string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::string special = "!@#$%^&*()-_=+<>?";
+std::string PasswordGenerator::GetCharacterPool(const int level) {
+    const std::string digits = "0123456789";
+    const std::string lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const std::string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const std::string special = "!@#$%^&*()-_=+<>?";
 
     std::string pool;
     if (level == 1) {
@@ -48,3 +68,13 @@ std::string PasswordGenerator::GetCharacterPool(int level) {
     return pool;
 }
 
+std::string PasswordGenerator::join(const std::vector<std::string>& elements, const std::string& delimiter) {
+    std::ostringstream result;
+    for (size_t i = 0; i < elements.size(); ++i) {
+        result << elements[i];
+        if (i < elements.size() - 1) {
+            result << delimiter;
+        }
+    }
+    return result.str();
+}

@@ -18,10 +18,13 @@ public:
 private:
     MainFrame* mainFrame;
     PasswordInputCtrl* passwordInput;
+    wxStaticText* hintText;
 
     wxStaticText* timerLabel;
     wxTimer timer;
+
     int remainingTime;
+    int currentLevel;
 
     void OnBackToMenu(wxCommandEvent& event);
     void OnTimer(wxTimerEvent& event);
