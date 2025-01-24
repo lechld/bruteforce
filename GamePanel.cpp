@@ -74,8 +74,11 @@ void GamePanel::OnTimer(wxTimerEvent &event) {
         UpdateTimerLabel();
     } else {
         timer.Stop();
-        wxMessageBox(playerName + ", check your standings in the Highscore.", "Time's up!", wxOK | wxICON_EXCLAMATION,
-                     this);
+
+        if (const int response = wxMessageBox(playerName + ", check your standings in the Highscore.",
+                                              "Time's up!", wxOK | wxICON_EXCLAMATION, this); response == wxOK) {
+            mainFrame->ShowHighscore();
+        }
     }
 }
 
