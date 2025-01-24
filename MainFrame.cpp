@@ -5,11 +5,14 @@
 #include "MainFrame.h"
 #include "MainMenuPanel.h"
 #include "GamePanel.h"
+#include "HighscoreManager.h"
 #include "HighscorePanel.h"
 
 MainFrame::MainFrame()
     : wxFrame(nullptr, wxID_ANY, "Bruteforce", wxDefaultPosition, wxSize(600, 400)) {
-    auto* sizer = new wxBoxSizer(wxVERTICAL);
+    HighscoreManager::GetInstance().LoadFromFile("highscores.csv");
+
+    auto *sizer = new wxBoxSizer(wxVERTICAL);
 
     mainMenu = new MainMenuPanel(this, this);
     gamePanel = new GamePanel(this, this);
@@ -23,6 +26,13 @@ MainFrame::MainFrame()
 
     ShowMenu();
 }
+
+MainFrame::~MainFrame() {
+    if (!HighscoreManager::GetInstance().SaveToFile("highscores.csv")) {
+        wxLogWarning("Failed to save highscores.csv");
+    }
+}
+
 
 void MainFrame::ShowMenu() {
     HidePanels();

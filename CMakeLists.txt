@@ -17,7 +17,9 @@ add_executable(bruteforce main.cpp
         PasswordInputCtrl.cpp
         PasswordInputCtrl.h
         PasswordGenerator.cpp
-        PasswordGenerator.h)
+        PasswordGenerator.h
+        HighscoreManager.cpp
+        HighscoreManager.h)
 
 find_package(wxWidgets)
 target_link_libraries(bruteforce wxWidgets::wxWidgets)

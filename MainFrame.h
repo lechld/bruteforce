@@ -14,15 +14,18 @@ class HighscorePanel;
 class MainFrame : public wxFrame {
 public:
     MainFrame();
+    ~MainFrame();
 
     void ShowMenu();
+
     void ShowGame();
+
     void ShowHighscore();
 
 private:
-    MainMenuPanel* mainMenu;
-    GamePanel* gamePanel;
-    HighscorePanel* highscorePanel;
+    MainMenuPanel *mainMenu;
+    GamePanel *gamePanel;
+    HighscorePanel *highscorePanel;
 
     void HidePanels();
 };
