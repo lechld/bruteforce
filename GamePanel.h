@@ -7,9 +7,6 @@
 
 #include "MainFrame.h"
 #include <wx/wx.h>
-
-#include <utility>
-
 #include "PasswordGenerator.h"
 #include "PasswordInputCtrl.h"
 
@@ -20,6 +17,7 @@ public:
     void SetPlayerName(const std::string &playerName) {
         this->playerName = playerName;
     }
+
 private:
     MainFrame *mainFrame;
     PasswordInputCtrl *passwordInput;
