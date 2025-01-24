@@ -7,6 +7,17 @@
 #include <random>
 #include <sstream>
 
+constexpr int LEVEL_DIGITS = 3;
+constexpr int LEVEL_LOWERCASE = 6;
+constexpr int LEVEL_DIGITS_LOWERCASE = 8;
+constexpr int LEVEL_DIGITS_LOWERCASE_UPPERCASE = 10;
+constexpr int LEVEL_ALL_CHARACTERS = 14;
+
+const std::string DIGITS = "0123456789";
+const std::string LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+const std::string UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const std::string SPECIAL = "!@#$%^&*()-_=+<>?";
+
 std::string PasswordGenerator::GeneratePassword(const int level) {
     const int passwordLength = GetPasswordLength(level);
     const std::string characterPool = GetCharacterPool(level);
@@ -39,7 +50,7 @@ std::string PasswordGenerator::GenerateHint(const std::string& password) {
         components.push_back("special characters");
     }
 
-    return  "Contains " + join(components, ", ");
+    return  "Hint: Contains only " + join(components, ", ");
 }
 
 int PasswordGenerator::GetPasswordLength(const int level) {
@@ -47,26 +58,44 @@ int PasswordGenerator::GetPasswordLength(const int level) {
 }
 
 std::string PasswordGenerator::GetCharacterPool(const int level) {
-    const std::string digits = "0123456789";
-    const std::string lowercase = "abcdefghijklmnopqrstuvwxyz";
-    const std::string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const std::string special = "!@#$%^&*()-_=+<>?";
-
-    std::string pool;
-    if (level <= 3) {
-        pool = digits;
-    } else if (level <= 6) {
-        pool = lowercase;
-    } else if (level <= 8) {
-        pool = digits + lowercase;
-    } else if (level <= 10) {
-        pool = digits + lowercase + uppercase;
-    } else if (level >= 14) {
-        pool = digits + lowercase + uppercase + special;
+    if (level <= LEVEL_DIGITS) {
+        return DIGITS;
+    }
+    if (level <= LEVEL_LOWERCASE) {
+        return LOWERCASE;
+    }
+    if (level <= LEVEL_DIGITS_LOWERCASE) {
+        return DIGITS + LOWERCASE;
+    }
+    if (level <= LEVEL_DIGITS_LOWERCASE_UPPERCASE) {
+        return DIGITS + LOWERCASE + UPPERCASE;
+    }
+    if (level >= LEVEL_ALL_CHARACTERS) {
+        return DIGITS + LOWERCASE + UPPERCASE + SPECIAL;
     }
 
-    return pool;
+    return DIGITS;
 }
+
+int PasswordGenerator::GetTimeBonus(int level) {
+    if (level <= LEVEL_DIGITS) {
+        return 30;
+    }
+    if (level <= LEVEL_LOWERCASE) {
+        return 60;
+    }
+    if (level <= LEVEL_DIGITS_LOWERCASE) {
+        return 90;
+    }
+    if (level <= LEVEL_DIGITS_LOWERCASE_UPPERCASE) {
+        return 120;
+    }
+    if (level >= LEVEL_ALL_CHARACTERS) {
+        return 200;
+    }
+    return 30;
+}
+
 
 std::string PasswordGenerator::join(const std::vector<std::string>& elements, const std::string& delimiter) {
     std::ostringstream result;

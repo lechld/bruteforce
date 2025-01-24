@@ -11,7 +11,7 @@
 constexpr int GAME_DURATION_SECONDS = 300;
 
 GamePanel::GamePanel(wxWindow *parent, MainFrame *mainFrame)
-    : wxPanel(parent), mainFrame(mainFrame), remainingTime(GAME_DURATION_SECONDS), currentLevel(1) {
+    : wxPanel(parent), mainFrame(mainFrame), remainingTime(0), currentLevel(0) {
     auto *mainSizer = new wxBoxSizer(wxVERTICAL);
 
     auto *headerSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -20,7 +20,7 @@ GamePanel::GamePanel(wxWindow *parent, MainFrame *mainFrame)
     backButton->Bind(wxEVT_BUTTON, &GamePanel::OnBackToMenu, this);
     headerSizer->Add(backButton, 0, wxALIGN_CENTER_VERTICAL | wxALL, 10);
 
-    auto *title = new wxStaticText(this, wxID_ANY, "Crack as my passwords as possible", wxDefaultPosition,
+    auto *title = new wxStaticText(this, wxID_ANY, "Find passwords", wxDefaultPosition,
                                    wxDefaultSize, wxALIGN_CENTER);
     title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
@@ -30,26 +30,27 @@ GamePanel::GamePanel(wxWindow *parent, MainFrame *mainFrame)
     titleSizer->AddStretchSpacer();
     headerSizer->Add(titleSizer, 1, wxEXPAND);
 
-    timerLabel = new wxStaticText(this, wxID_ANY, "05:00", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-    timerLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    headerSizer->Add(timerLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 10);
+    pointsLabel = new wxStaticText(this, wxID_ANY, "0 Points", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    pointsLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    headerSizer->Add(pointsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 10);
 
     mainSizer->Add(headerSizer, 0, wxEXPAND | wxALL, 10);
 
     auto *divider = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 2), wxLI_HORIZONTAL);
     mainSizer->Add(divider, 0, wxEXPAND | wxALL, 10);
 
-    auto password = PasswordGenerator::GeneratePassword(currentLevel);
-    auto hint = PasswordGenerator::GenerateHint(password);
-
-    passwordInput = new PasswordInputCtrl(this, password, wxID_ANY, wxDefaultPosition, wxSize(400, -1));
+    passwordInput = new PasswordInputCtrl(this, "", wxID_ANY, wxDefaultPosition, wxSize(400, -1));
     passwordInput->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     passwordInput->SetMinSize(wxSize(400, 30));
     mainSizer->Add(passwordInput, 0, wxALIGN_CENTER | wxALL, 10);
 
-    hintText = new wxStaticText(this, wxID_ANY, hint, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    hintText = new wxStaticText(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     hintText->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     mainSizer->Add(hintText, 0, wxALIGN_CENTER | wxALL, 10);
+
+    timerLabel = new wxStaticText(this, wxID_ANY, "00:00", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    timerLabel->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    mainSizer->Add(timerLabel, 0, wxALIGN_CENTER | wxALL, 10);
 
     SetSizer(mainSizer);
 
@@ -57,8 +58,6 @@ GamePanel::GamePanel(wxWindow *parent, MainFrame *mainFrame)
     timer.Bind(wxEVT_TIMER, &GamePanel::OnTimer, this);
 
     passwordInput->Bind(EVT_PASSWORD_CORRECT, &GamePanel::OnPasswordCorrect, this);
-
-    UpdateTimerLabel();
 }
 
 
@@ -87,8 +86,7 @@ void GamePanel::UpdateTimerLabel() {
 
 void GamePanel::OnShow(wxShowEvent &event) {
     if (event.IsShown()) {
-        remainingTime = GAME_DURATION_SECONDS;
-        UpdateTimerLabel();
+        NextLevel();
         timer.Start(1000);
     } else {
         timer.Stop();
@@ -96,13 +94,27 @@ void GamePanel::OnShow(wxShowEvent &event) {
 }
 
 void GamePanel::OnPasswordCorrect(wxCommandEvent &event) {
-    currentLevel = currentLevel + 1;
+    const auto timeBonus = PasswordGenerator::GetTimeBonus(currentLevel);
 
-    auto password = PasswordGenerator::GeneratePassword(currentLevel);
+    const auto points = timeBonus * 100 + remainingTime * 100;
+    currentPoints += points;
+    pointsLabel->SetLabel(wxString::Format("%02d Points", currentPoints));
+    NextLevel();
+}
+
+void GamePanel::NextLevel() {
+    currentLevel++;
+
+    const auto password = PasswordGenerator::GeneratePassword(currentLevel);
+    const auto hint = PasswordGenerator::GenerateHint(password);
 
     passwordInput->Clear();
     passwordInput->SetTargetPassword(password);
-
-    auto hint = PasswordGenerator::GenerateHint(password);
     hintText->SetLabel(hint);
+
+    std::cout << "Password is: ." + password << std::endl;
+
+    remainingTime += PasswordGenerator::GetTimeBonus(currentLevel);
+
+    Layout();
 }

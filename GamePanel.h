@@ -20,16 +20,20 @@ private:
     PasswordInputCtrl* passwordInput;
     wxStaticText* hintText;
 
+    wxStaticText* pointsLabel;
+
     wxStaticText* timerLabel;
     wxTimer timer;
 
     int remainingTime;
     int currentLevel;
+    int currentPoints;
 
     void OnBackToMenu(wxCommandEvent& event);
     void OnTimer(wxTimerEvent& event);
     void UpdateTimerLabel();
     void OnShow(wxShowEvent& event);
     void OnPasswordCorrect(wxCommandEvent& event);
+    void NextLevel();
 };
 #endif //GAMEPANEL_H

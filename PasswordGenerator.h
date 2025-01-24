@@ -10,6 +10,7 @@ class PasswordGenerator {
 public:
     static std::string GeneratePassword(int level);
     static std::string GenerateHint(const std::string& password);
+    static int GetTimeBonus(int level);
 private:
     static int GetPasswordLength(int level);
     static std::string GetCharacterPool(int level);

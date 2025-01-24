@@ -33,6 +33,10 @@ void PasswordInputCtrl::OnTextChange(wxCommandEvent& event) {
 void PasswordInputCtrl::HighlightInput() {
     wxString userInput = GetValue();
 
+    if (userInput.IsEmpty()) {
+        return;
+    }
+
     Freeze(); // skip drawing for now
     Unbind(wxEVT_TEXT, &PasswordInputCtrl::OnTextChange, this);
     Clear();
