@@ -1,6 +1,10 @@
 # bruteforce
 
 This is the final project for the course [700.016 (24W) Advanced Programming in C/C++] at Alpen-Adria University Klagenfurt.
+
+The basic inspiration is coming from [this](https://www.reddit.com/r/badUIbattles/comments/1fzgm6f/manual_bruteforce/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+reddit post. 
+
 ## Setup
 
 Install [Conan](https://docs.conan.io/2/installation.html).
